@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gocolly/colly"
@@ -64,9 +65,8 @@ func getProxy() string {
 }
 func getCPrice() {
 	CHPrice := hp.New(2019, 3)
-
-	URLtoCity := make(map[string]string)
-	AreatoCity := make(map[string]string)
+	var URLtoCity sync.Map
+	var AreatoCity sync.Map
 	c := colly.NewCollector(
 		colly.UserAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"),
 		colly.Async(true),
@@ -93,14 +93,14 @@ func getCPrice() {
 	c.OnHTML(".bigArea", func(e *colly.HTMLElement) {
 		url := e.Request.URL.Hostname()
 		k := url[:strings.Index(url, ".")]
-		if _, ok := URLtoCity[k]; ok {
-			cityName := URLtoCity[k]
+		if value, ok := URLtoCity.Load(k); ok {
+			cityName := value
 			e.ForEach("a", func(_ int, e *colly.HTMLElement) {
-				AreatoCity[e.Text] = cityName
+				// AreatoCity[e.Text] = cityName
+				AreatoCity.Store(e.Text, cityName)
 				e.Request.Visit(e.Attr("href"))
 			})
 		}
-		fmt.Println("requset URL:", k, URLtoCity[k])
 	})
 
 	c.OnHTML("script", func(e *colly.HTMLElement) {
@@ -116,12 +116,12 @@ func getCPrice() {
 					CHPrice.City[p.Name].Price = make([]int, len(p.Data))
 					copy(CHPrice.City[p.Name].Price, p.Data)
 				} else {
-					cityName := AreatoCity[p.Name]
-					if _, ok := CHPrice.City[cityName]; !ok {
+					cityName, _ := AreatoCity.Load(p.Name)
+					if _, ok := CHPrice.City[cityName.(string)]; !ok {
 						fmt.Println(cityName, p.Name)
 					} else {
 						area := hp.NewArea(p.Name, p.Data)
-						CHPrice.City[cityName].Area = append(CHPrice.City[cityName].Area, area)
+						CHPrice.City[cityName.(string)].Area = append(CHPrice.City[cityName.(string)].Area, area)
 						// CHPrice.City[cityName].Add(p.Name, p.Data)
 					}
 				}
@@ -135,16 +135,17 @@ func getCPrice() {
 	// 		c.Visit(v)
 	// 	}
 	// }
-	for k, v := range CityURL[0] {
+	for k, v := range CityURL[1] {
 		vv := v[8:strings.Index(v, ".")]
 		// fmt.Println("url：", k, v)
-		URLtoCity[vv] = k
+		// URLtoCity[vv] = k
+		URLtoCity.Store(vv, k)
 		CHPrice.Add(k)
 		c.Visit(v)
 		c.Wait()
 	}
 	// c.Visit("https://anshan.anjuke.com/market/")
-	CHPrice.Save("CityPrice0.json")
+	CHPrice.Save("CityPriceB.json")
 }
 
 func readJSON(filename string) []map[string]string {
