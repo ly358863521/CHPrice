@@ -117,6 +117,9 @@ func getCPrice() {
 					copy(CHPrice.City[p.Name].Price, p.Data)
 				} else {
 					cityName, _ := AreatoCity.Load(p.Name)
+					if cityName == nil {
+						return
+					}
 					if _, ok := CHPrice.City[cityName.(string)]; !ok {
 						fmt.Println(cityName, p.Name)
 					} else {
@@ -135,7 +138,7 @@ func getCPrice() {
 	// 		c.Visit(v)
 	// 	}
 	// }
-	for k, v := range CityURL[1] {
+	for k, v := range CityURL[22] {
 		vv := v[8:strings.Index(v, ".")]
 		// fmt.Println("url：", k, v)
 		// URLtoCity[vv] = k
@@ -145,7 +148,7 @@ func getCPrice() {
 		c.Wait()
 	}
 	// c.Visit("https://anshan.anjuke.com/market/")
-	CHPrice.Save("CityPriceB.json")
+	CHPrice.Save("CityPriceOther.json")
 }
 
 func readJSON(filename string) []map[string]string {
