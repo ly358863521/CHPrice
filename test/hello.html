@@ -24,15 +24,10 @@
     <div id="dom3" style="position: absolute;left:5%;top:50%;width:40%;height:50%;"></div>
     <div id="dom4" style="position: absolute;right:5%;top:50%;width:40%;height:50%;"></div>
     <script type="text/javascript">
-        // var cityname = [
-        //     "北京", "上海", "长春", "深圳", "哈尔滨", "西安"
-        // ];
+        var cityname = [
+            "北京", "上海", "长春", "深圳", "哈尔滨", "西安"
+        ];
 
-        provinceMap = $.ajax({
-            url: "/getProvince",
-            async: false
-        });
-        // alert(htmlobj.responseJSON.name)
         // 基于准备好的dom，初始化echarts实例
         var myChart1 = echarts.init(document.getElementById('dom1'));
         var myChart2 = echarts.init(document.getElementById('dom2'));
@@ -43,32 +38,115 @@
             return Math.round(Math.random() * 500);
         }
 
-        var mydata = []
-        for (var i in provinceMap.responseJSON) {
-            mydata.push({
-                name: i,
-                value: provinceMap.responseJSON[i]
-            })
-        }
-        var Alldata = $.ajax({
-            url: "/getCitys/黑龙江",
-            async: false
-        });
-        var AlldataJson = Alldata.responseJSON
-        var provinceName = "黑龙江省"
-        var citys = AlldataJson["citys"]
-        var thePrice = AlldataJson["thePrice"]
-        var lastPrice = AlldataJson["lastPrice"]
-        var arealist = AlldataJson["arealist"]
-        var areathePrice = AlldataJson["areathePrice"]
-        var arealastPrice = AlldataJson["arealastPrice"]
-        var cityname = AlldataJson["cityName"]
-        var cityPrice = AlldataJson["cityPrice"]
+        var mydata = [{
+            name: '北京',
+            value: randomData()
+        }, {
+            name: '天津',
+            value: randomData()
+        }, {
+            name: '上海',
+            value: randomData()
+        }, {
+            name: '重庆',
+            value: randomData()
+        }, {
+            name: '河北',
+            value: randomData()
+        }, {
+            name: '河南',
+            value: randomData()
+        }, {
+            name: '云南',
+            value: randomData()
+        }, {
+            name: '辽宁',
+            value: randomData()
+        }, {
+            name: '黑龙江',
+            value: randomData()
+        }, {
+            name: '湖南',
+            value: randomData()
+        }, {
+            name: '安徽',
+            value: randomData()
+        }, {
+            name: '山东',
+            value: randomData()
+        }, {
+            name: '新疆',
+            value: randomData()
+        }, {
+            name: '江苏',
+            value: randomData()
+        }, {
+            name: '浙江',
+            value: randomData()
+        }, {
+            name: '江西',
+            value: randomData()
+        }, {
+            name: '湖北',
+            value: randomData()
+        }, {
+            name: '广西',
+            value: randomData()
+        }, {
+            name: '甘肃',
+            value: randomData()
+        }, {
+            name: '山西',
+            value: randomData()
+        }, {
+            name: '内蒙古',
+            value: randomData()
+        }, {
+            name: '陕西',
+            value: randomData()
+        }, {
+            name: '吉林',
+            value: randomData()
+        }, {
+            name: '福建',
+            value: randomData()
+        }, {
+            name: '贵州',
+            value: randomData()
+        }, {
+            name: '广东',
+            value: randomData()
+        }, {
+            name: '青海',
+            value: randomData()
+        }, {
+            name: '西藏',
+            value: randomData()
+        }, {
+            name: '四川',
+            value: randomData()
+        }, {
+            name: '宁夏',
+            value: randomData()
+        }, {
+            name: '海南',
+            value: randomData()
+        }, {
+            name: '台湾',
+            value: randomData()
+        }, {
+            name: '香港',
+            value: randomData()
+        }, {
+            name: '澳门',
+            value: randomData()
+        }];
+
 
         // 指定图表的配置项和数据
         var option1 = {
             title: {
-                text: cityname + "房价走势图",
+                text: "北京市房价走势图",
                 subtext: "2019.3 - 2020.2",
                 left: "center"
             },
@@ -91,15 +169,12 @@
                 min: function(value) {
                     return value.min - 500;
                 },
-                max: function(value) {
-                    return value.max + 100;
-                },
                 // data: [0, 10, 20, 30, 40, 50, 60, 70, 80]
             },
             series: [{
                 name: '均价',
                 type: 'line',
-                data: cityPrice,
+                data: [60487, 59993, 59809, 60142, 60061, 59888, 59590, 59126, 58540, 58568, 58439, 58127],
             }]
         };
 
@@ -115,24 +190,26 @@
             },
             visualMap: {
                 show: false,
-                // // x: 'left',
-                // start: 40,
-                // top: 'bottom',
+                x: 'left',
+                top: 'bottom',
                 splitList: [{
-                    start: 50000,
-                    end: 60000
+                    start: 500,
+                    end: 600
                 }, {
-                    start: 10000,
-                    end: 50000
+                    start: 400,
+                    end: 500
                 }, {
-                    start: 5000,
-                    end: 10000
+                    start: 300,
+                    end: 400
                 }, {
-                    start: 2000,
-                    end: 5000
+                    start: 200,
+                    end: 300
+                }, {
+                    start: 100,
+                    end: 200
                 }, {
                     start: 0,
-                    end: 2000
+                    end: 100
                 }, ],
                 // inRange: {
                 //     color: ['#66CC33', '#FF0000'] //取值范围的颜色
@@ -161,7 +238,7 @@
         };
         var option3 = {
             title: {
-                text: provinceName + '各城市房价示意图',
+                text: '黑龙江省各城市房价示意图',
                 subtext: '2019.3 - 2020.2',
                 left: 'center'
             },
@@ -188,7 +265,7 @@
                 }
             },
             legend: {
-                data: ['上个月', '当月'],
+                data: ['当月', '上个月'],
                 left: 10
             },
             axisPointer: {
@@ -205,26 +282,26 @@
             },
             xAxis: {
                 type: 'category',
-                data: citys
+                data: cityname
             },
             yAxis: {
                 name: '元/平方',
                 type: 'value',
             },
             series: [{
-                name: '上个月',
-                type: 'bar',
-                data: lastPrice
-            }, {
                 name: '当月',
                 type: 'bar',
-                data: thePrice
+                data: [18203, 23489, 29034, 104970, 131744, 630230]
+            }, {
+                name: '上个月',
+                type: 'bar',
+                data: [19325, 23438, 31000, 121594, 134141, 681807]
             }]
         };
         var option4 = {
             title: {
-                text: cityname + '各地区房价示意图',
-                subtext: '2019.3 - 2020.2'
+                text: '黑龙江省各市',
+                subtext: '数据来自网络'
             },
             tooltip: {
                 trigger: 'axis',
@@ -234,7 +311,7 @@
             },
 
             legend: {
-                data: ['当月', '上个月']
+                data: ['2011年', '2012年']
             },
 
             toolbox: {
@@ -261,81 +338,30 @@
             },
             yAxis: {
                 type: 'category',
-                data: arealist
+                data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
             },
             series: [{
-                name: '当月',
+                name: '2011年',
                 type: 'bar',
-                data: areathePrice
+                data: [18203, 23489, 29034, 104970, 131744, 630230]
             }, {
-                name: '上个月',
+                name: '2012年',
                 type: 'bar',
-                data: arealastPrice
+                data: [19325, 23438, 31000, 121594, 134141, 681807]
             }]
         };
         // 使用刚指定的配置项和数据显示图表。
 
         // 点击时间处理
         myChart2.on('click', function(params) {
-            // if (params.value) {
-            //     alert("单击了" + params.name, "value:", params.value);
-            // } else {
-            //     alert("单击了" + params.name);
-            // }
-            // option1.title.text = "改变"
-            provinceName = params.name
-            Alldata = $.ajax({
-                url: "/getCitys/" + provinceName,
-                async: false
-            });
-            AlldataJson = Alldata.responseJSON
-            cityName = AlldataJson["cityName"]
-            option1.title.text = AlldataJson["cityName"] + "房价走势图"
-            option1.series[0].data = AlldataJson["cityPrice"]
-            option3.title.text = provinceName + '各城市房价示意图'
-            option3.xAxis.data = AlldataJson["citys"]
-            option3.series[0].data = AlldataJson["thePrice"]
-            option3.series[1].data = AlldataJson["lastPrice"]
-            option4.title.text = AlldataJson["cityName"] + '各地区房价示意图'
-            option4.yAxis.data = AlldataJson["arealist"]
-            option4.series[0].data = AlldataJson["areathePrice"]
-            option4.series[1].data = AlldataJson["arealastPrice"]
-            myChart1.setOption(option1);
-            // myChart2.setOption(option2);
-            myChart3.setOption(option3);
-            myChart4.setOption(option4);
+            if (params.value) {
+                alert("单击了" + params.name, "value:", params.value);
+            } else {
+                alert("单击了" + params.name);
+            }
+            option1.title.text = "改变"
+            myChart1.setOption(option1)
         });
-        myChart3.on('click', function(params) {
-            // alert("单击了" + params.name);
-            cityName = params.name
-            Alldata = $.ajax({
-                url: "/getAreas/" + cityName,
-                async: false
-            });
-            AlldataJson = Alldata.responseJSON
-            option1.title.text = cityName + "房价走势图"
-            option1.series[0].data = AlldataJson["pricelist"]
-            option4.title.text = cityName + '各地区房价示意图'
-            option4.yAxis.data = AlldataJson["arealist"]
-            option4.series[0].data = AlldataJson["areathePrice"]
-            option4.series[1].data = AlldataJson["arealastPrice"]
-            myChart1.setOption(option1);
-            myChart4.setOption(option4);
-
-        });
-        myChart4.on('click', function(params) {
-            var areaName = params.name
-            Alldata = $.ajax({
-                url: "/getArea/" + cityName + "/" + areaName,
-                async: false
-            });
-            AlldataJson = Alldata.responseJSON
-            option1.title.text = areaName + "区房价走势图"
-            option1.series[0].data = AlldataJson["areaprice"]
-            myChart1.setOption(option1);
-        });
-
-
         myChart1.setOption(option1);
         myChart2.setOption(option2);
         myChart3.setOption(option3);
