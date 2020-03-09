@@ -73,7 +73,7 @@ def saveCityPrice(db):
         provinceMap = json.load(f)
     
     for filename in filePath.iterdir():
-        with open(filename,"r",encoding="utf-8-sig") as f:
+        with open(str(filename),"r",encoding="utf-8-sig") as f:
             cityPrice = json.load(f)
             for v in cityPrice["City"].values():
 
